@@ -4,19 +4,19 @@ class sum_squares:
     @staticmethod
     def calc_loss(ypred, ytrue):
         sumsq = np.sum(np.square(ypred - ytrue))
-        return sumsq#.reshape(1,1) # total sumsq over all o/p units
+        return sumsq.reshape(1,1)
 
     @staticmethod
     def gradient(ypred, ytrue):
         grad = 2 * (ypred - ytrue) * ypred
-        return np.array([grad]) # 1xK
+        return grad.reshape(1,1)
 
 class cross_entropy:
     # only applicable to 1X1 ouput units
     @staticmethod
     def calc_loss(ypred, ytrue):
         ce_loss = (ytrue) * np.log(ypred) + (1 - ytrue) * np.log(1 - ypred)
-        return (-ce_loss)#.reshape(1,1)
+        return (-ce_loss).reshape(1,1)
 
     @staticmethod
     def gradient(ypred, ytrue):

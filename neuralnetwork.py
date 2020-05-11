@@ -45,19 +45,12 @@ class neuralnetwork:
     def forward(self, inputs, predict = False):
 
         current_x = inputs
-        # current_x = np.insert(current_x, 0, 1, axis = 0)
-        # self.Y.append(current_x)
         for k in range(self.nlayers):
 
             current_x = np.insert(current_x, 0, 1, axis = 0)
             self.Y.append(current_x)
-
-            print(f"shape(w) = {np.shape(self.W[k])}, shape(x) = {np.shape(current_x.T)}")
-
             z = (np.matmul(self.W[k], current_x.T)).T
             self.Z.append(z)
-
-            print(f"shape(z) = {np.shape(z)}")
 
             if self.activations[k] == None:
                 y = z
@@ -69,11 +62,8 @@ class neuralnetwork:
             if predict == False and self.dropouts[k] != None:
                  y /= self.dropouts[k]
 
-            # print(f"shape(y) = {np.shape(y)}")
-            # y = np.insert(y, 0, 1, axis = 0)
-            # self.Y.append(y)
-            # print(f"shape(y) = {np.shape(y)}")
             current_x = y
+
         self.Y.append(y)
         return y
 
@@ -81,6 +71,7 @@ class neuralnetwork:
         current_grad = op_gradient
         for k in range(self.nlayers, -1, -1):
 
+            print(f"size(current grad) = {np.shape(current_grad)}")
             if self.activations[k - 1] == None:
                 gradDz = current_grad
 
@@ -88,6 +79,7 @@ class neuralnetwork:
                 sigma = activfunc_dict[self.activations[k - 1]]
                 gradDz = np.matmul(current_grad, sigma.backward(self.Z[k - 1]))
 
+            print(f"gradDz == {np.shape(gradDz)}")
             gradzw = np.matmul(np.ones(np.shape(self.W[k - 1])[0]), self.Y[k - 1])
             self.Wgrad[k - 1] = np.matmul(gradDz, gradzw)
 
