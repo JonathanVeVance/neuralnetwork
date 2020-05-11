@@ -26,6 +26,6 @@ class cross_entropy:
             grad = - 1 / (1 - ypred)
         return grad.reshape(1,1) # 1x1
 
-ret = (cross_entropy.calc_loss(np.array([0.42]), np.array([0.5])))
-print(ret)
+# ret = (cross_entropy.calc_loss(np.array([0.42]), np.array([0.5])))
+# print(ret)
 

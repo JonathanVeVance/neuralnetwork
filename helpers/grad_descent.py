@@ -18,7 +18,6 @@ def SGD(network, X_train, Y_train, lossfunction,
             if accelerator != None:
                 update = accelerator(learning_rate, network.Wgrad)
                 network.W += update
-
             else:
                 network.W -= learning_rate * network.Wgrad # SGD update
 
@@ -62,7 +61,6 @@ def MiniBatchGD(network, X_train, Y_train, lossfunction, batch_size,
             if accelerator != None:
                 update = accelerator(learning_rate, Wgrad)
                 network.W += update
-
             else:
                 network.W -= learning_rate * Wgrad
 
