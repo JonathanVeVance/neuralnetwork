@@ -11,7 +11,7 @@ def SGD(network, X_train, Y_train, lossfunction, eta = 0.001):
 
             network.clear_outputs()
             ypred = network.forward(x)
-            op_gradient = lossfunction.gradient(ypred, Y_train[idx])
+            op_gradient = lossfunction.gradient(ypred, Y_train[idx, None])
             network.backward(op_gradient)
             network.W -= eta * network.Wgrad # SGD update
 
@@ -19,7 +19,7 @@ def SGD(network, X_train, Y_train, lossfunction, eta = 0.001):
         network.clear_outputs()
         for idx, x in enumerate(X_train):
             ypred = network.forward(x)
-            total_loss += lossfunction.calc_loss(ypred, Y_train[idx])
+            total_loss += lossfunction.calc_loss(ypred, Y_train[idx, None])
 
         if abs(prev_loss - total_loss) < 0.01:
             break # stopping condition
@@ -45,8 +45,8 @@ def MiniBatchGD(network, X_train, Y_train, lossfunction, batch_size = 32, eta = 
             for idx in range(start_idx, end_idx):
 
                 network.clear_outputs()
-                ypred = network.forward(X_train[idx])
-                op_gradient = lossfunction.gradient(ypred, Y_train[idx])
+                ypred = network.forward(X_train[idx, None])
+                op_gradient = lossfunction.gradient(ypred, Y_train[idx, None])
                 network.backward(op_gradient)
                 Wgrad += network.Wgrad # assuming lossfunction is a total sum
 
@@ -56,7 +56,7 @@ def MiniBatchGD(network, X_train, Y_train, lossfunction, batch_size = 32, eta = 
         network.clear_outputs()
         for idx, x in enumerate(X_train):
             ypred = network.forward(x)
-            total_loss += lossfunction.calc_loss(ypred, Y_train[idx])
+            total_loss += lossfunction.calc_loss(ypred, Y_train[idx, None])
 
         if abs(prev_loss - total_loss) < 0.01:
             break # stopping condition

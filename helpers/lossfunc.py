@@ -27,4 +27,6 @@ class cross_entropy:
             grad = - 1 / (1 - ypred)
         return grad # 1X1 array
 
-# print(cross_entropy.gradient(np.array([0.3]), np.array([1])))
+# ret = (sum_squares.gradient(np.array([0.3]), np.array([0.5])))
+# print(ret)
+# print(np.shape(ret))

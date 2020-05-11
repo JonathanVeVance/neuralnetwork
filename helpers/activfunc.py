@@ -5,7 +5,7 @@ class ReLu:
     @staticmethod
     def forward(z):
         z[z < 0] = 0
-        return z
+        return np.array(z)
 
     @staticmethod
     def backward(z):
@@ -17,7 +17,7 @@ class sigmoid:
     @staticmethod
     def forward(z):
         y = 1 / (1 + np.exp(-z))
-        return y
+        return np.array(y)
 
     @staticmethod
     def backward(z):
