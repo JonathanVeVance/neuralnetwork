@@ -1,6 +1,6 @@
 import numpy as np
 
-def SGD(network, X_train, Y_train, lossfunction,
+def SGD(network, X_train, Y_train, lossfunction, batch_size,
         learning_rate, regularizer, accelerator):
 
     prev_loss = 0
