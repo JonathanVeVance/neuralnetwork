@@ -1,3 +1,6 @@
+## Be careful whether to use Jacobian or transpose of
+## Jacobian for unsymmetric jacobians (eg: softmax function)
+
 import numpy as np
 
 class ReLu:
