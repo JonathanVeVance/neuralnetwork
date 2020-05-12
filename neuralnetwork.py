@@ -33,6 +33,13 @@ class network:
         self.prev_layer_neurons = None
 
     def add_layer(self, num_neurons, activation = None, dropout = None):
+        """
+        Function to add hidden and output layers
+        Inputs:     num_nerons  : number of units in layer
+                    activation  : activation function (default = linear unit)
+                    dropout     : dropout fraction (float) (default = None, or no dropout)
+        Outputs:    None
+        """
         if self.nlayers == 0:
             self.W.append(None)
         else:
@@ -46,7 +53,12 @@ class network:
         self.nlayers += 1
 
     def forward(self, inputs, predict = False):
-
+        """
+        Function to compute output of the network
+        Inputs:     inputs      : input (numpy array of dimension 1xN)
+                    predict     : set to True during prediction and False during training
+        Outputs:    y           : output of the network
+        """
         current_x = inputs
         for k in range(self.nlayers):
 
@@ -72,6 +84,12 @@ class network:
         return y
 
     def backward(self, op_gradient, regularizer):
+        """
+        Function to backpropagate gradients
+        Inputs:     op_gradient : derrivative/gradient of loss wrt output (1xN)
+                    regularizer : regularizer object (L2/L1)
+        Outputs:    None
+        """
         gradDy = op_gradient
         for k in range(self.nlayers, 0, -1):
 
@@ -93,6 +111,11 @@ class network:
             gradDy = np.matmul(gradDz, gradzy)
 
     def clear_outputs(self):
+        """
+        Function to clear intermediate cached values
+        Inputs      : None
+        Outputs     : None
+        """
         self.Z = []
         self.Y = []
 
@@ -111,7 +134,18 @@ class network:
 
     def train_network(self, X_train, Y_train, loss_function, grad_descent_type = 'sgd', batch_size = None,
                       learning_rate = 0.001, regularizer = None, accelerator = None):
-
+        """
+        Function to train the network
+        Inputs:     X_train             : training set (numpy array NxP)
+                    Y_train             : target values of train set (numpy array)
+                    loss_function       : choose from 'sumsquares' and 'crossentropy'
+                    grad_descent_type   : choose from 'sgd'(default) and 'minibatchgd'
+                    batch_size          : batch size for 'minibatchgd' (will be ignored if 'sgd')
+                    learning_rate       : learning rate (float)
+                    regularizer         : regularizer object (L2/L1)
+                    accelerator         : accelerator object (adam/momentum/rmsprop)
+        Outputs     None
+        """
         input_size = np.shape(X_train)[1]
         layer1_size = np.shape(self.W[1])[1]
         self.W[0] = np.random.rand(layer1_size, input_size)

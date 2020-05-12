@@ -2,12 +2,23 @@ import numpy as np
 
 class momentum:
     def __init__(self, mu):
+        """
+        Inputs  :   mu:  momentum coefficient
+        Outputs :   None
+        """
         self.mu = mu
         self.avg_weights = []
         self.avg_bias = []
 
     def calc_update(self, eta, weights_grad, bias_grad):
-
+        """
+        Function to compute momentum update value
+        Inputs:     eta:    learning rate
+                    weights_grad : gradients wrt all weights (list of np arrays)
+                    bias_grad    : gradient of all biases (list)
+        Outputs:    avg_weights  : update for weights (list)
+                    avg_bias     : update for biases (list)
+        """
         if len(self.avg_bias) == 0:
             for idx in range(len(bias_grad)):
                 self.avg_bias.append(eta * bias_grad[idx])
@@ -21,12 +32,23 @@ class momentum:
 
 class rmsprop:
     def __init__(self, decay_rate):
+        """
+        Inputs:   decay_rate  : decay rate parameter
+        Outputs   None
+        """
         self.bias_cache = []
         self.weights_cache = []
         self.decay_rate = decay_rate
 
     def calc_update(self, eta, weights_grad, bias_grad):
-
+        """
+        Function to compute rmsprop update values
+        Inputs  :   eta             : learning rate
+                    weights_grad    : gradients wrt all weights (list of np arrays)
+                    bias_grad       : gradient of all biases (list)
+        Outputs :   weights_update  : update for weights (list)
+                    bias_update     : update for biases (list)
+        """
         if len(self.bias_cache) == 0:
             for idx in range(len(bias_grad)):
                 self.bias_cache.append((1 - self.decay_rate) * np.square(bias_grad[idx]))
@@ -48,6 +70,11 @@ class rmsprop:
 
 class adam:
     def __init__(self, avg_decay, var_decay):
+        """
+        Inputs  :   avg_decay   : decay parameter for running average of gradients
+                    var_decay   : decay parameter for running variance of gradients
+        Outputs :   None
+        """
         self.avg_bias = []
         self.var_bias = []
         self.avg_weights = []
@@ -56,7 +83,14 @@ class adam:
         self.var_decay = var_decay
 
     def calc_update(self, eta, weights_grad, bias_grad):
-
+        """
+        Function to compute adam update values
+        Inputs  :   eta             : learning rate
+                    weights_grad    : gradients wrt all weights (list of np arrays)
+                    bias_grad       : gradient of all biases (list)
+        Outputs :   weights_update  : update for weights (list)
+                    bias_update     : update for biases (list)
+        """
         if len(self.avg_bias) == 0:
             for idx in range(len(bias_grad)):
                 self.avg_weights.append((1 - self.avg_decay) * weights_grad[idx])

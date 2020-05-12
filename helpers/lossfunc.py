@@ -1,6 +1,9 @@
 import numpy as np
 
 class sum_squares:
+    """
+    Sum of squares loss function for SINGLE output units
+    """
     @staticmethod
     def calc_loss(ypred, ytrue):
         sumsq = np.sum(np.square(ypred - ytrue))
@@ -12,7 +15,9 @@ class sum_squares:
         return grad.reshape(1,1)
 
 class cross_entropy:
-    # only applicable to 1X1 ouput units
+    """
+    Cross entropy loss function for SINGLE output units
+    """
     @staticmethod
     def calc_loss(ypred, ytrue):
         ce_loss = (ytrue) * np.log(ypred) + (1 - ytrue) * np.log(1 - ypred)
@@ -21,9 +26,9 @@ class cross_entropy:
     @staticmethod
     def gradient(ypred, ytrue):
         if ytrue == 1:
-            grad = - 1 / ypred
+            grad = - 1 / (ypred + 1e-7)
         else:
-            grad = - 1 / (1 - ypred)
+            grad = - 1 / (1 - ypred + 1e-7)
         return grad.reshape(1,1) # 1x1
 
 # ret = (cross_entropy.calc_loss(np.array([0.42]), np.array([0.5])))

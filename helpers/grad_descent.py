@@ -2,15 +2,24 @@ import numpy as np
 
 def SGD(network, X_train, Y_train, lossfunction, batch_size,
         learning_rate, regularizer, accelerator):
-
+    """
+    Function to train network using stochastic gradient descent
+    Inputs  :   network       :  neuralnetwork object
+                X_train       :  train dataset (features)
+                Y_train       :  target values (training set)
+                lossfunction  :  loss function (sumsqures/crossentropy)
+                batch_size    :  (will be ignored)
+                learning_rate : learning rate
+                regularizer   :  regularizer object (L2/L1)
+                accelerator   :  accelerator object (adam/rmsprop/momentum)
+    Outputs     None
+    """
     prev_loss = 0
     while True:
         permut = np.random.permutation(len(Y_train))
         X_train = X_train[permut]
         Y_train = Y_train[permut]
         for idx, x in enumerate(X_train):
-
-            print('.', end = '')
 
             network.clear_outputs()
             ypred = network.forward(x)
@@ -32,7 +41,7 @@ def SGD(network, X_train, Y_train, lossfunction, batch_size,
         if regularizer != None:
             total_loss += regularizer.calc_loss(network.W)
 
-        if abs(prev_loss - total_loss) < 10:
+        if abs(prev_loss - total_loss) < 0.01:
             break # stopping condition
 
         elif prev_loss != 0 and total_loss > 3 * prev_loss:
@@ -40,12 +49,23 @@ def SGD(network, X_train, Y_train, lossfunction, batch_size,
             print('Exploding cost')
             break
 
-        print("\n\n", total_loss)
+        print(total_loss)
         prev_loss = total_loss
 
 def MiniBatchGD(network, X_train, Y_train, lossfunction, batch_size,
                 learning_rate, regularizer, accelerator):
-
+    """
+    Function to train network using mini batch gradient descent
+    Inputs  :   network       :  neuralnetwork object
+                X_train       :  train dataset (features)
+                Y_train       :  target values (training set)
+                lossfunction  :  loss function (sumsqures/crossentropy)
+                batch_size    :  batch size
+                learning_rate : learning rate
+                regularizer   :  regularizer object (L2/L1)
+                accelerator   :  accelerator object (adam/rmsprop/momentum)
+    Outputs     None
+    """
     prev_loss = 0
     while True:
         permut = np.random.permutation(len(Y_train))
@@ -55,8 +75,6 @@ def MiniBatchGD(network, X_train, Y_train, lossfunction, batch_size,
         for batch_num in range(len(Y_train) // batch_size):
             start_idx = batch_num * batch_size
             end_idx = min(len(Y_train), batch_num * batch_size + batch_size)
-
-            print('.', end = '')
 
             Wgrad = []
             for idx in range(len(network.Wgrad)):
@@ -89,14 +107,14 @@ def MiniBatchGD(network, X_train, Y_train, lossfunction, batch_size,
         if regularizer != None:
             total_loss += regularizer.calc_loss(network.W)
 
-        if abs(prev_loss - total_loss) < 10:
+        if abs(prev_loss - total_loss) < 0.01:
             break # stopping condition
 
         elif prev_loss != 0 and total_loss > 3 * prev_loss:
             print('Exploding cost')
             break
 
-        print("\n\n", total_loss)
+        print(total_loss)
         prev_loss = total_loss
 
 

@@ -1,10 +1,9 @@
-## Be careful whether to use Jacobian or transpose of
-## Jacobian for unsymmetric jacobians (eg: softmax function)
-
 import numpy as np
 
 class ReLu:
-
+    """
+    ReLu vector activation layer
+    """
     @staticmethod
     def forward(z):
         z[z < 0] = 0
@@ -13,10 +12,12 @@ class ReLu:
     @staticmethod
     def backward(z):
         grad = np.where(z > 0, 1, 0)
-        return np.diagflat(grad) # Jacobian
+        return np.diagflat(grad)
 
 class sigmoid:
-
+    """
+    Sigmoid vector activation layer
+    """
     @staticmethod
     def forward(z):
         y = 1 / (1 + np.exp(-z))
