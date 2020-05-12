@@ -24,9 +24,11 @@ class network:
         self.W = []
         self.Z = []
         self.Y = []
-        self.Wgrad = None
+        self.bias = []
+        self.Wgrad = []
         self.nlayers = 0
         self.dropouts = []
+        self.bias_grad = []
         self.activations = []
         self.prev_layer_neurons = None
 
@@ -34,9 +36,10 @@ class network:
         if self.nlayers == 0:
             self.W.append(None)
         else:
-            weights = np.random.rand(num_neurons, self.prev_layer_neurons + 1)
+            weights = np.random.rand(num_neurons, self.prev_layer_neurons)
             self.W.append(weights)
 
+        self.bias.append(np.random.rand())
         self.dropouts.append(dropout)
         self.activations.append(activation)
         self.prev_layer_neurons = num_neurons
@@ -47,14 +50,9 @@ class network:
         current_x = inputs
         for k in range(self.nlayers):
 
-            current_x = np.insert(current_x, 0, 1, axis = 0)
-            self.Y.append(current_x)
-            z = (np.matmul(self.W[k], current_x.T)).T
-            self.Z.append(z)
-
+            z = (np.matmul(self.W[k], current_x.T)).T + self.bias[k]
             if self.activations[k] == None:
                 y = z
-
             else:
                 sigma = activfunc_dict[self.activations[k]]
                 y = sigma.forward(z)
@@ -62,43 +60,65 @@ class network:
             if predict == False and self.dropouts[k] != None:
                  y /= self.dropouts[k]
 
+            if predict == False:
+                self.Y.append(current_x)
+                self.Z.append(z)
+
             current_x = y
 
-        self.Y.append(y)
+        if predict == False:
+            self.Y.append(y)
+
         return y
 
     def backward(self, op_gradient, regularizer):
-        current_grad = op_gradient
-        for k in range(self.nlayers, -1, -1):
+        gradDy = op_gradient
+        for k in range(self.nlayers, 0, -1):
 
-            print(f"size(current grad) = {np.shape(current_grad)}")
             if self.activations[k - 1] == None:
-                gradDz = current_grad
+                gradDz = gradDy
 
             else:
                 sigma = activfunc_dict[self.activations[k - 1]]
-                gradDz = np.matmul(current_grad, sigma.backward(self.Z[k - 1]))
+                gradDz = np.matmul(gradDy, sigma.backward(self.Z[k - 1]))
 
-            print(f"gradDz == {np.shape(gradDz)}")
-            gradzw = np.matmul(np.ones(np.shape(self.W[k - 1])[0]), self.Y[k - 1])
-            self.Wgrad[k - 1] = np.matmul(gradDz, gradzw)
+            gradzy = self.W[k - 1]
+            gradzw = np.matmul(np.ones((np.shape(self.W[k - 1])[0], 1)), self.Y[k - 1].reshape(1,-1))
 
+            self.bias_grad[k - 1] = np.sum(gradDz)
+            self.Wgrad[k - 1] = np.matmul(np.diagflat(gradDz), gradzw)
             if regularizer != None:
                 self.Wgrad[k - 1] += regularizer.gradient(self.W[k - 1])
 
-            current_grad = np.matmul(gradDz, self.W[k - 1])
+            gradDy = np.matmul(gradDz, gradzy)
 
     def clear_outputs(self):
         self.Z = []
         self.Y = []
+
+    def update(self, learning_rate = None, weights_update = None, bias_update = None):
+
+        if weights_update is None:
+            weights_update = self.Wgrad
+            bias_update = self.bias_grad
+
+        if learning_rate == None:
+            learning_rate = 1
+
+        for idx in range(len(self.bias)):
+            self.W[idx] -= learning_rate * weights_update[idx]
+            self.bias[idx] -= learning_rate * bias_update[idx]
 
     def train_network(self, X_train, Y_train, loss_function, grad_descent_type = 'sgd', batch_size = None,
                       learning_rate = 0.001, regularizer = None, accelerator = None):
 
         input_size = np.shape(X_train)[1]
         layer1_size = np.shape(self.W[1])[1]
-        self.W[0] = np.random.rand(layer1_size - 1, input_size + 1)
-        self.Wgrad = np.zeros(np.shape(self.W))
+        self.W[0] = np.random.rand(layer1_size, input_size)
+        for W in self.W:
+            self.Wgrad.append(np.zeros(np.shape(W)))
+        self.bias_grad = np.zeros(len(self.bias))
+
         loss_function = lossfunc_dict[loss_function]
         grad_descent = grad_descent_dict[grad_descent_type]
         grad_descent(self, X_train, Y_train, loss_function, batch_size, learning_rate, regularizer, accelerator)

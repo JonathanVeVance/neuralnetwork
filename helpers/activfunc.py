@@ -13,7 +13,7 @@ class ReLu:
     @staticmethod
     def backward(z):
         grad = np.where(z > 0, 1, 0)
-        return np.diag(grad) # Jacobian
+        return np.diagflat(grad) # Jacobian
 
 class sigmoid:
 
@@ -26,7 +26,7 @@ class sigmoid:
     def backward(z):
         y = sigmoid.forward(z)
         grad = y * (1 - y)
-        return np.diag(grad) # Jacobian
+        return np.diagflat(grad) # Jacobian
 
 # print(sigmoid.forward(np.array([2])))
 

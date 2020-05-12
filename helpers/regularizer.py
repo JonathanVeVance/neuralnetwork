@@ -5,8 +5,10 @@ class l2_regularizer:
         self.penalty_param = penalty_param
 
     def calc_loss(self, weights):
-        penalty = self.penalty_param * np.sum(np.square(weights))
-        return penalty
+        penalty = 0
+        for W in weights:
+            penalty += np.sum(np.square(W))
+        return self.penalty_param * penalty
 
     def gradient(self, weights):
         penalty_grad = 2 * self.penalty_param * weights
@@ -17,8 +19,10 @@ class l1_regularizer:
         self.penalty_param = penalty_param
 
     def calc_loss(self, weights):
-        penalty = self.penalty_param * np.sum(np.abs(weights))
-        return penalty
+        penalty = 0
+        for W in weights:
+            penalty += np.sum(np.abs(W))
+        return self.penalty_param * penalty
 
     def gradient(self, weights):
         penalty_grad = self.penalty_param * np.sign(weights)
