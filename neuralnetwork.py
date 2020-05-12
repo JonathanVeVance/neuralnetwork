@@ -18,7 +18,7 @@ grad_descent_dict = {
     'sgd': SGD, 'minibatchgd': MiniBatchGD
 }
 
-class neuralnetwork:
+class network:
 
     def __init__(self):
         self.W = []
