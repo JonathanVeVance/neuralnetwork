@@ -39,6 +39,7 @@ class network:
                     activation  : activation function (default = linear unit)
                     dropout     : dropout fraction (float) (default = None, or no dropout)
         Outputs:    None
+        NOTE: You don't need to pass in an input layer. It is automatically added.
         """
         if self.nlayers == 0:
             self.W.append(None)
