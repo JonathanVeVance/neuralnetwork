@@ -1,6 +1,9 @@
 import numpy as np
 
 class l2_regularizer:
+    """
+    L2 regularizer on weights
+    """
     def __init__(self, penalty_param):
         self.penalty_param = penalty_param
 
@@ -15,6 +18,9 @@ class l2_regularizer:
         return penalty_grad
 
 class l1_regularizer:
+    """
+    L1 regularizer on weights
+    """
     def __init__(self, penalty_param):
         self.penalty_param = penalty_param
 
