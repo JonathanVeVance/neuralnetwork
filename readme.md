@@ -1,7 +1,3 @@
-# Foobar
-
-Foobar is a Python library for dealing with word pluralization.
-
 ## What is it?
 
 This is a personal project that I undertook to code a neural network API, similar to keras Sequential API, from scratch.
