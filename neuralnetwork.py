@@ -120,7 +120,16 @@ class network:
         self.Y = []
 
     def update(self, learning_rate = None, weights_update = None, bias_update = None):
-
+        """
+        Function to update weights and biases
+        Inputs :    learning_rate       : learning rate (float)
+                    weights_update      : update for weights (if acceleration is used)
+                    bias_update         : update for biases (if acceleration is used)
+        Outputa:    None
+        CAUTION:    If no acceleration is used, pass learning rate and leave weights_update and bias_update
+                    as None; else, leave learning_rate as None, and pass weights_update and bias_update. Don't
+                    pass in all three parameters.
+        """
         if weights_update is None:
             weights_update = self.Wgrad
             bias_update = self.bias_grad
@@ -158,7 +167,11 @@ class network:
         grad_descent(self, X_train, Y_train, loss_function, batch_size, learning_rate, regularizer, accelerator)
 
     def predict(self, X_test):
-
+        """
+        Function to predict output
+        Inputs :    X_test      : numpy matrix of input features
+                    Y_test_pred : numpy array of predictions    
+        """
         Y_test_pred = []
         for x in X_test:
             y = self.forward(x, predict = True)
