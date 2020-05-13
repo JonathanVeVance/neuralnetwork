@@ -20,7 +20,7 @@ class cross_entropy:
     """
     @staticmethod
     def calc_loss(ypred, ytrue):
-        ce_loss = (ytrue) * np.log(ypred) + (1 - ytrue) * np.log(1 - ypred)
+        ce_loss = (ytrue) * np.log(ypred + 1e-7) + (1 - ytrue) * np.log(1 - ypred + 1e-7)
         return (-ce_loss).reshape(1,1)
 
     @staticmethod
