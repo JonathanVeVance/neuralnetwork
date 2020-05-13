@@ -28,7 +28,7 @@ class cross_entropy:
         if ytrue == 1:
             grad = - 1 / (ypred + 1e-7)
         else:
-            grad = - 1 / (1 - ypred + 1e-7)
+            grad = 1 / (1 - ypred + 1e-7)
         return grad.reshape(1,1) # 1x1
 
 # ret = (cross_entropy.calc_loss(np.array([0.42]), np.array([0.5])))
