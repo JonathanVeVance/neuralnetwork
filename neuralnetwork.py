@@ -125,7 +125,7 @@ class network:
         Inputs :    learning_rate       : learning rate (float)
                     weights_update      : update for weights (if acceleration is used)
                     bias_update         : update for biases (if acceleration is used)
-        Outputa:    None
+        Outputs:    None
         CAUTION:    If no acceleration is used, pass learning rate and leave weights_update and bias_update
                     as None; else, leave learning_rate as None, and pass weights_update and bias_update. Don't
                     pass in all three parameters.
