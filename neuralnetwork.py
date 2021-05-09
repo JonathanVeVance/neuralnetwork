@@ -171,7 +171,7 @@ class network:
         """
         Function to predict output
         Inputs :    X_test      : numpy matrix of input features
-                    Y_test_pred : numpy array of predictions    
+                    Y_test_pred : numpy array of predictions
         """
         Y_test_pred = []
         for x in X_test:
